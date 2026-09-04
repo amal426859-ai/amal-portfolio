@@ -1,0 +1,98 @@
+---
+// The recurring "threshold" motif — an architectural opening rather than a
+// fantasy portal. Nested frames suggest looking through a doorway or
+// window toward a space defined by the section's accent color. Used
+// sparingly: hero, About's "what sets her apart" moment, and project
+// entry transitions (Section 4 of the brief).
+
+type Props = {
+  accent?: "sky" | "pink" | "green" | "yellow" | "coral";
+  variant?: "arch" | "window" | "aperture";
+  class?: string;
+};
+
+const { accent = "sky", variant = "window", class: className = "" } = Astro.props as Props;
+const gradientId = `threshold-glow-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<svg
+  class={`threshold-frame ${className}`}
+  data-accent={accent}
+  viewBox="0 0 400 500"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-hidden="true"
+>
+  <defs>
+    <radialGradient id={gradientId} cx="50%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="var(--threshold-accent)" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="var(--threshold-accent)" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- outer register frame -->
+  <rect x="12" y="12" width="376" height="476" stroke="currentColor" stroke-opacity="0.25" stroke-width="1" />
+
+  <!-- registration ticks (architectural drawing convention) -->
+  <line x1="0" y1="250" x2="12" y2="250" stroke="currentColor" stroke-opacity="0.35" />
+  <line x1="388" y1="250" x2="400" y2="250" stroke="currentColor" stroke-opacity="0.35" />
+  <line x1="200" y1="0" x2="200" y2="12" stroke="currentColor" stroke-opacity="0.35" />
+  <line x1="200" y1="488" x2="200" y2="500" stroke="currentColor" stroke-opacity="0.35" />
+
+  {
+    variant === "arch" && (
+      <path
+        d="M60 460 V180 A140 140 0 0 1 340 180 V460"
+        stroke="currentColor"
+        stroke-width="1.5"
+        fill={`url(#${gradientId})`}
+      />
+    )
+  }
+
+  {
+    variant === "window" && (
+      <>
+        <rect x="60" y="60" width="280" height="400" stroke="currentColor" stroke-width="1.5" fill={`url(#${gradientId})`} />
+        <line x1="200" y1="60" x2="200" y2="460" stroke="currentColor" stroke-opacity="0.4" />
+        <line x1="60" y1="260" x2="340" y2="260" stroke="currentColor" stroke-opacity="0.4" />
+      </>
+    )
+  }
+
+  {
+    variant === "aperture" && (
+      <>
+        <circle cx="200" cy="250" r="150" stroke="currentColor" stroke-width="1.5" fill={`url(#${gradientId})`} />
+        <circle cx="200" cy="250" r="100" stroke="currentColor" stroke-opacity="0.3" />
+        <circle cx="200" cy="250" r="50" stroke="currentColor" stroke-opacity="0.3" />
+      </>
+    )
+  }
+</svg>
+
+<style>
+  .threshold-frame {
+    color: var(--ink);
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .threshold-frame[data-accent="sky"] {
+    --threshold-accent: var(--sky);
+  }
+  .threshold-frame[data-accent="pink"] {
+    --threshold-accent: var(--pink);
+  }
+  .threshold-frame[data-accent="green"] {
+    --threshold-accent: var(--green);
+  }
+  .threshold-frame[data-accent="yellow"] {
+    --threshold-accent: var(--yellow);
+  }
+  .threshold-frame[data-accent="coral"] {
+    --threshold-accent: var(--coral);
+  }
+</style>

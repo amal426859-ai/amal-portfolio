@@ -1,0 +1,108 @@
+---
+import { experience } from "../../data/experience";
+
+type Props = { locale: "en" | "ar" };
+const { locale } = Astro.props as Props;
+const ex = experience[locale];
+---
+
+<section id="experience" class="experience">
+  <div class="container">
+    <div class="experience-head" data-reveal>
+      <p class="eyebrow">{ex.eyebrow}</p>
+      <h2 class="heading experience-heading">{ex.heading}</h2>
+    </div>
+
+    <div class="ledger">
+      {
+        ex.companies.map((company) => (
+          <div class="ledger-company" data-reveal>
+            <p class="ledger-company-name">{company.name}</p>
+            <ul class="ledger-roles">
+              {company.roles.map((role) => (
+                <li class="ledger-role">
+                  <span class="ledger-role-title">{role.title}</span>
+                  <span class="ledger-role-period">{role.period}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .experience {
+    padding-block: var(--space-2xl);
+  }
+
+  .experience-head {
+    max-width: 44ch;
+    margin-bottom: var(--space-xl);
+  }
+
+  .experience-heading {
+    font-size: var(--text-3xl);
+    margin-top: var(--space-xs);
+  }
+
+  .ledger {
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .ledger-company {
+    display: grid;
+    grid-template-columns: 22ch 1fr;
+    gap: var(--space-lg);
+    padding-block: var(--space-lg);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .ledger-company-name {
+    font-weight: 600;
+    font-size: var(--text-lg);
+  }
+
+  .ledger-roles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .ledger-role {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-md);
+    color: var(--ink-soft);
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: var(--space-xs);
+  }
+
+  .ledger-role:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .ledger-role-period {
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 700px) {
+    .ledger-company {
+      grid-template-columns: 1fr;
+      gap: var(--space-sm);
+    }
+
+    .ledger-role {
+      flex-direction: column;
+      gap: var(--space-3xs);
+    }
+  }
+</style>

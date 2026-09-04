@@ -1,0 +1,85 @@
+---
+import { brands, brandLogos } from "../../data/brands";
+
+type Props = { locale: "en" | "ar" };
+const { locale } = Astro.props as Props;
+const b = brands[locale];
+---
+
+<section id="brands" class="brands" data-reveal>
+  <div class="container">
+    <p class="eyebrow">{b.heading}</p>
+    <p class="brands-body body-copy">{b.body}</p>
+
+    <ul class="brands-strip">
+      {
+        brandLogos.map((logo) => (
+          <li class="brand-slot" title={`/assets/brands/${logo.file}`}>
+            <img src={`/assets/brands/${logo.file}`} alt={logo.name} loading="lazy" onerror="this.parentElement.dataset.missing='true'" />
+            <span class="brand-fallback">{logo.name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .brands {
+    padding-block: var(--space-2xl);
+    background: var(--paper-dim);
+  }
+
+  .brands-body {
+    margin-block: var(--space-2xs) var(--space-lg);
+  }
+
+  .brands-strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-lg);
+    align-items: center;
+  }
+
+  .brand-slot {
+    width: 140px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-sm);
+    position: relative;
+    filter: grayscale(1);
+    opacity: 0.75;
+    transition: opacity var(--duration-micro) var(--ease-out), filter var(--duration-micro) var(--ease-out);
+  }
+
+  .brand-slot:hover {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+
+  .brand-slot img {
+    max-width: 80%;
+    max-height: 60%;
+  }
+
+  .brand-fallback {
+    display: none;
+    font-size: var(--text-xs);
+    color: var(--ink-faint);
+    text-transform: capitalize;
+  }
+
+  .brand-slot[data-missing="true"] img {
+    display: none;
+  }
+
+  .brand-slot[data-missing="true"] .brand-fallback {
+    display: block;
+  }
+</style>

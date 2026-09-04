@@ -1,0 +1,96 @@
+---
+import { expertise } from "../../data/expertise";
+
+type Props = { locale: "en" | "ar" };
+const { locale } = Astro.props as Props;
+const e = expertise[locale];
+---
+
+<section id="expertise" class="expertise">
+  <div class="container">
+    <div class="expertise-head" data-reveal>
+      <p class="eyebrow">{e.eyebrow}</p>
+      <h2 class="heading expertise-heading">{e.heading}</h2>
+    </div>
+
+    <ol class="expertise-index">
+      {
+        e.items.map((item, i) => (
+          <li class="expertise-item" data-reveal>
+            <span class="expertise-number">{String(i + 1).padStart(2, "0")}</span>
+            <div class="expertise-copy">
+              <p class="expertise-title">{item.title}</p>
+              <p class="expertise-body">{item.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .expertise {
+    padding-block: var(--space-2xl);
+    background: var(--paper-dim);
+  }
+
+  .expertise-head {
+    max-width: 44ch;
+    margin-bottom: var(--space-xl);
+  }
+
+  .expertise-heading {
+    font-size: var(--text-3xl);
+    margin-top: var(--space-xs);
+  }
+
+  .expertise-index {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .expertise-item {
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: var(--space-md);
+    padding-block: var(--space-md);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .expertise-number {
+    font-variant-numeric: tabular-nums;
+    color: var(--green-deep);
+    font-size: var(--text-sm);
+    padding-top: 0.2em;
+  }
+
+  .expertise-title {
+    font-weight: 600;
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2xs);
+  }
+
+  .expertise-body {
+    color: var(--ink-soft);
+    max-width: 62ch;
+  }
+
+  [dir="rtl"] .expertise-item {
+    grid-template-columns: 1fr 4rem;
+  }
+
+  [dir="rtl"] .expertise-number {
+    order: 2;
+    text-align: end;
+  }
+
+  @media (max-width: 640px) {
+    .expertise-item,
+    [dir="rtl"] .expertise-item {
+      grid-template-columns: 3rem 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+// Original abstract atmosphere — soft light studies built from CSS
+// gradients, not photography or raster imagery. Each section gets one
+// variant so no two feel like the same graphic reused (Section 5 of the
+// brief). Purely decorative: aria-hidden, sits behind content.
+
+type Props = {
+  accent?: "sky" | "pink" | "green" | "yellow" | "coral";
+  variant?: "drift" | "horizon" | "aperture" | "ledger";
+  class?: string;
+};
+
+const { accent = "sky", variant = "drift", class: className = "" } = Astro.props as Props;
+---
+
+<div class={`atmosphere atmosphere--${variant} ${className}`} data-accent={accent} aria-hidden="true"></div>
+
+<style>
+  .atmosphere {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .atmosphere[data-accent="sky"] {
+    --field-accent: var(--sky);
+  }
+  .atmosphere[data-accent="pink"] {
+    --field-accent: var(--pink);
+  }
+  .atmosphere[data-accent="green"] {
+    --field-accent: var(--green);
+  }
+  .atmosphere[data-accent="yellow"] {
+    --field-accent: var(--yellow);
+  }
+  .atmosphere[data-accent="coral"] {
+    --field-accent: var(--coral);
+  }
+
+  .atmosphere--drift::before,
+  .atmosphere--drift::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.55;
+  }
+
+  .atmosphere--drift::before {
+    width: 42vw;
+    height: 42vw;
+    max-width: 620px;
+    max-height: 620px;
+    background: var(--field-accent);
+    top: -12%;
+    inset-inline-end: -8%;
+  }
+
+  .atmosphere--drift::after {
+    width: 26vw;
+    height: 26vw;
+    max-width: 380px;
+    max-height: 380px;
+    background: var(--field-accent);
+    opacity: 0.35;
+    bottom: -10%;
+    inset-inline-start: 6%;
+  }
+
+  .atmosphere--horizon {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--field-accent) 30%, transparent) 48%,
+      transparent 62%
+    );
+  }
+
+  .atmosphere--horizon::before {
+    content: "";
+    position: absolute;
+    inset-inline: 8%;
+    top: 46%;
+    height: 1px;
+    background: color-mix(in srgb, var(--field-accent) 70%, var(--ink) 30%);
+    opacity: 0.4;
+  }
+
+  .atmosphere--aperture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 78% 28%,
+      color-mix(in srgb, var(--field-accent) 45%, transparent) 0%,
+      transparent 45%
+    );
+  }
+
+  .atmosphere--ledger {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--field-accent) 18%, transparent) 0,
+      color-mix(in srgb, var(--field-accent) 18%, transparent) 1px,
+      transparent 1px,
+      transparent 96px
+    );
+    opacity: 0.6;
+  }
+
+  @media (max-width: 720px) {
+    .atmosphere--drift::before {
+      width: 70vw;
+      height: 70vw;
+    }
+    .atmosphere--drift::after {
+      width: 46vw;
+      height: 46vw;
+    }
+  }
+</style>

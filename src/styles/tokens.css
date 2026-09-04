@@ -1,0 +1,107 @@
+/*
+  Design tokens.
+
+  Palette: one shared neutral pair (paper/ink) plus five accents from the
+  brief. Accents are never combined as a single "brand color" — each major
+  section owns exactly one, so the site reads as a sequence of distinct
+  rooms rather than one hue repeated everywhere.
+
+    Home / opening   -> sky   (arrival, air)
+    About            -> pink  (personal register)
+    Expertise        -> green (growth, range of disciplines)
+    Work             -> ink-led, accent set per project by its own assets
+    Brands           -> yellow (credibility, warmth)
+    Experience       -> ink-led ledger, sky accent for present role
+    Education/Skills -> green (continuity with Expertise)
+    Contact          -> coral (warmth, invitation)
+*/
+
+:root {
+  /* Neutrals */
+  --paper: #f8f5ef;
+  --paper-dim: #f1ece2;
+  --surface: #ffffff;
+  --ink: #221e19;
+  --ink-soft: #6f675b;
+  --ink-faint: #a89d8c;
+  --line: #e4dcca;
+  --line-strong: #cabfa8;
+
+  /* Accents */
+  --sky: #9dc9de;
+  --sky-deep: #4f8aa6;
+  --pink: #eec2cd;
+  --pink-deep: #c07f92;
+  --green: #b3cf9f;
+  --green-deep: #6f8f56;
+  --yellow: #e7b84f;
+  --yellow-deep: #a97e21;
+  --coral: #dd8f79;
+  --coral-deep: #a85940;
+
+  /* Type families */
+  --font-display-en: "Fraunces", "Iowan Old Style", "Palatino Linotype", serif;
+  --font-body-en: "Inter", -apple-system, "Segoe UI", sans-serif;
+  --font-display-ar: "El Messiri", "Segoe UI", serif;
+  --font-body-ar: "IBM Plex Sans Arabic", "Segoe UI", sans-serif;
+
+  /* Type scale (English defaults; Arabic sets its own rhythm in [dir="rtl"] below) */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.3125rem;
+  --text-xl: 1.75rem;
+  --text-2xl: clamp(2rem, 1.5rem + 2vw, 2.75rem);
+  --text-3xl: clamp(2.75rem, 1.8rem + 4vw, 4.5rem);
+  --text-4xl: clamp(3.25rem, 1.9rem + 6vw, 6.25rem);
+
+  --leading-tight: 1.1;
+  --leading-snug: 1.28;
+  --leading-body: 1.65;
+  --leading-body-serif: 1.55;
+
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+
+  /* Spacing scale */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1.25rem;
+  --space-md: 2rem;
+  --space-lg: 3.5rem;
+  --space-xl: 6rem;
+  --space-2xl: 9rem;
+  --space-3xl: 13rem;
+
+  /* Measure */
+  --measure-body: 62ch;
+  --measure-body-serif: 68ch;
+
+  /* Motion (see .claude/skills/interaction-design) */
+  --duration-micro: 140ms;
+  --duration-sm: 260ms;
+  --duration-md: 420ms;
+  --duration-lg: 680ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --radius-sm: 2px;
+  --container-max: 78rem;
+}
+
+[dir="rtl"] {
+  --text-base: 1.0625rem;
+  --leading-body: 1.85;
+  --tracking-wide: 0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-micro: 1ms;
+    --duration-sm: 1ms;
+    --duration-md: 1ms;
+    --duration-lg: 1ms;
+  }
+}

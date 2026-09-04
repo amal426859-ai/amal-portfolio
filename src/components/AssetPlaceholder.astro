@@ -1,0 +1,111 @@
+---
+// Marks a spot where a REAL project asset belongs. Never a stand-in for
+// real work — just a clearly labeled slot so it's obvious what to drop in
+// under /public/assets/projects/<slug>/ (Section 33 of the brief).
+
+type Props = {
+  label: string;
+  file: string;
+  type: "video" | "image" | "gallery" | "pdf";
+  accent?: "sky" | "pink" | "green" | "yellow" | "coral";
+  aspect?: "video" | "portrait" | "square" | "wide";
+};
+
+const { label, file, type, accent = "sky", aspect = "video" } = Astro.props as Props;
+---
+
+<div class="asset-placeholder" data-accent={accent} data-aspect={aspect}>
+  <div class="asset-placeholder-icon" aria-hidden="true">
+    {
+      type === "video" && (
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+      )
+    }
+    {
+      type === "image" && (
+        <svg viewBox="0 0 24 24" width="22" height="22">
+          <rect x="3" y="4" width="18" height="16" rx="1" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <circle cx="9" cy="10" r="1.6" fill="currentColor" />
+          <path d="M4 17l5-5 4 4 3-3 4 4" fill="none" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      )
+    }
+    {
+      type === "gallery" && (
+        <svg viewBox="0 0 24 24" width="22" height="22">
+          <rect x="3" y="3" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <rect x="9" y="9" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      )
+    }
+    {
+      type === "pdf" && (
+        <svg viewBox="0 0 24 24" width="22" height="22">
+          <path d="M6 2h9l5 5v15H6z" fill="none" stroke="currentColor" stroke-width="1.5" />
+          <path d="M15 2v5h5" fill="none" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      )
+    }
+  </div>
+  <p class="asset-placeholder-label">{label}</p>
+  <p class="asset-placeholder-file">{file}</p>
+</div>
+
+<style>
+  .asset-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    text-align: center;
+    border: 1.5px dashed var(--line-strong);
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--slot-accent) 8%, var(--paper));
+    color: var(--ink-soft);
+    padding: var(--space-md);
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  .asset-placeholder[data-aspect="portrait"] {
+    aspect-ratio: 3 / 4;
+  }
+  .asset-placeholder[data-aspect="square"] {
+    aspect-ratio: 1 / 1;
+  }
+  .asset-placeholder[data-aspect="wide"] {
+    aspect-ratio: 21 / 9;
+  }
+
+  .asset-placeholder[data-accent="sky"] {
+    --slot-accent: var(--sky);
+  }
+  .asset-placeholder[data-accent="pink"] {
+    --slot-accent: var(--pink);
+  }
+  .asset-placeholder[data-accent="green"] {
+    --slot-accent: var(--green);
+  }
+  .asset-placeholder[data-accent="yellow"] {
+    --slot-accent: var(--yellow);
+  }
+  .asset-placeholder[data-accent="coral"] {
+    --slot-accent: var(--coral);
+  }
+
+  .asset-placeholder-icon {
+    color: var(--ink-faint);
+  }
+
+  .asset-placeholder-label {
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+    max-width: 26ch;
+  }
+
+  .asset-placeholder-file {
+    font-size: var(--text-xs);
+    color: var(--ink-faint);
+  }
+</style>

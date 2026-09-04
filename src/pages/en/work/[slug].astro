@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ProjectCaseStudy from "../../../components/ProjectCaseStudy.astro";
+import { projects } from "../../../data/projects";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const copy = project.en;
+---
+
+<BaseLayout
+  locale="en"
+  title={`${copy.title} — Amal Alsofayan`}
+  description={copy.objective}
+>
+  <ProjectCaseStudy project={project} locale="en" />
+</BaseLayout>

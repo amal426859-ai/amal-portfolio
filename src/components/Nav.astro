@@ -1,0 +1,262 @@
+---
+import { site } from "../data/site";
+import { altLocalePath, otherLocale } from "../utils/i18n";
+
+type Props = { locale: "en" | "ar" };
+const { locale } = Astro.props as Props;
+const s = site[locale];
+const pathname = Astro.url.pathname;
+const isHome = pathname === `/${locale}/` || pathname === `/${locale}`;
+const homeHref = `/${locale}/`;
+const altHref = altLocalePath(pathname, otherLocale(locale));
+---
+
+<header class="nav" data-nav>
+  <div class="container nav-inner">
+    <a class="nav-mark" href={homeHref}>{s.name}</a>
+
+    <nav aria-label="Primary" class="nav-links">
+      <ul>
+        {
+          s.nav.map((item) => (
+            <li>
+              <a href={isHome ? item.href : `${homeHref}${item.href}`}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="lang-switch" href={altHref} lang={otherLocale(locale)}>
+        {s.languageSwitchLabel}
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" data-nav-toggle>
+        <span class="visually-hidden">{locale === "en" ? "Open menu" : "فتح القائمة"}</span>
+        <span class="nav-toggle-bars" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!--
+  Deliberately a sibling of <header>, not nested inside it: header has
+  backdrop-filter for the frosted-glass nav bar, and backdrop-filter (like
+  filter) creates a new containing block for position:fixed descendants —
+  a fixed child would then be sized/positioned relative to the header's
+  own small box instead of the viewport.
+-->
+<div id="mobile-nav" class="mobile-nav" data-mobile-nav>
+  <ul>
+    {
+      s.nav.map((item) => (
+        <li>
+          <a href={isHome ? item.href : `${homeHref}${item.href}`} data-mobile-nav-link>
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <a class="lang-switch" href={altHref} lang={otherLocale(locale)}>{s.languageSwitchLabel}</a>
+</div>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-block-end: 1px solid transparent;
+    transition: border-color var(--duration-sm) var(--ease-out);
+  }
+
+  .nav[data-scrolled="true"] {
+    border-block-end-color: var(--line);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding-block: var(--space-xs);
+  }
+
+  .nav-mark {
+    font-family: var(--font-display-en);
+    font-weight: 500;
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-tight);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  [dir="rtl"] .nav-mark {
+    font-family: var(--font-display-ar);
+    font-weight: 600;
+  }
+
+  .nav-links ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-md);
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+    transition: color var(--duration-micro) var(--ease-out);
+  }
+
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .lang-switch {
+    font-size: var(--text-sm);
+    text-decoration: none;
+    color: var(--ink-soft);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.3em 0.85em;
+    transition: border-color var(--duration-micro) var(--ease-out), color var(--duration-micro) var(--ease-out);
+  }
+
+  .lang-switch:hover {
+    color: var(--ink);
+    border-color: var(--ink-soft);
+  }
+
+  .nav-toggle {
+    display: none;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-toggle-bars,
+  .nav-toggle-bars::before,
+  .nav-toggle-bars::after {
+    display: block;
+    width: 1.15rem;
+    height: 1.5px;
+    background: var(--ink);
+  }
+
+  .nav-toggle-bars::before,
+  .nav-toggle-bars::after {
+    content: "";
+    position: relative;
+  }
+
+  .nav-toggle-bars::before {
+    top: -5px;
+  }
+
+  .nav-toggle-bars::after {
+    top: 3px;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
+  @media (max-width: 760px) {
+    .nav-links {
+      display: none;
+    }
+
+    .lang-switch {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: inline-flex;
+    }
+
+    .mobile-nav {
+      display: block;
+      position: fixed;
+      inset: 0;
+      top: 61px;
+      z-index: 55;
+      background: var(--paper);
+      padding: var(--space-lg) var(--space-md);
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-sm) var(--ease-out), transform var(--duration-sm) var(--ease-out);
+    }
+
+    .mobile-nav[data-open="true"] {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .mobile-nav ul {
+      list-style: none;
+      margin: 0 0 var(--space-lg);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .mobile-nav a {
+      font-family: var(--font-display-en);
+      font-size: var(--text-xl);
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    [dir="rtl"] .mobile-nav a {
+      font-family: var(--font-display-ar);
+    }
+
+    .mobile-nav .lang-switch {
+      display: inline-block;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+  const mobileNav = document.querySelector<HTMLElement>("[data-mobile-nav]");
+
+  if (toggle && mobileNav) {
+    toggle.addEventListener("click", () => {
+      const isOpen = mobileNav.getAttribute("data-open") === "true";
+      mobileNav.setAttribute("data-open", String(!isOpen));
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+    });
+
+    mobileNav.querySelectorAll("[data-mobile-nav-link]").forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileNav.setAttribute("data-open", "false");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  if (nav) {
+    const onScroll = () => {
+      nav.setAttribute("data-scrolled", String(window.scrollY > 12));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+</script>

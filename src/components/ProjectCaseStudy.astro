@@ -1,0 +1,344 @@
+---
+// Renders one project case study. The four-part Objective/Role/Execution/
+// Outcome structure (Section 14 of the brief) is constant, but the hero
+// treatment adapts to how the project's real assets will actually read —
+// cinematic (video-led), sequence (a campaign to step through stage by
+// stage), editorial (layered decor/print composition), photography
+// (full-screen image-led), or digital (social-style grid). Section 28.
+
+import type { Project } from "../data/projects";
+import AssetPlaceholder from "./AssetPlaceholder.astro";
+import ThresholdFrame from "./visuals/ThresholdFrame.astro";
+
+type Props = { project: Project; locale: "en" | "ar" };
+const { project, locale } = Astro.props as Props;
+const copy = project[locale];
+const [cover, ...restAssets] = project.assets;
+---
+
+<article class="case-study" data-accent={project.accent}>
+  <header class="case-hero" data-reveal>
+    <div class="container case-hero-inner">
+      <p class="eyebrow">{copy.category}</p>
+      <h1 class="heading case-title">{copy.title}</h1>
+    </div>
+  </header>
+
+  {
+    project.layout === "sequence" && copy.journey && (
+      <section class="journey">
+        <div class="container">
+          <ol class="journey-list">
+            {copy.journey.map((stage, i) => {
+              const stageAssets = project.assets.filter((a) => a.stageIndex === i);
+              return (
+                <li class="journey-stage" data-reveal>
+                  <span class="journey-index">{String(i + 1).padStart(2, "0")}</span>
+                  <p class="journey-label">{stage}</p>
+                  <div class="journey-stage-assets">
+                    {stageAssets.map((asset, j) => (
+                      <div transition:name={i === 0 && j === 0 ? `project-cover-${project.slug}` : undefined}>
+                        <AssetPlaceholder label={asset.label[locale]} file={asset.file} type={asset.type} accent={project.accent} aspect={asset.type === "video" ? "video" : "wide"} />
+                      </div>
+                    ))}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    project.layout === "cinematic" && (
+      <section class="hero-media" data-reveal>
+        <div class="container">
+          <div transition:name={`project-cover-${project.slug}`}>
+            <AssetPlaceholder label={cover.label[locale]} file={cover.file} type={cover.type} accent={project.accent} aspect="wide" />
+          </div>
+          <div class="hero-media-grid">
+            {restAssets.map((asset) => (
+              <AssetPlaceholder label={asset.label[locale]} file={asset.file} type={asset.type} accent={project.accent} aspect="video" />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    project.layout === "photography" && (
+      <section class="hero-media hero-media--full" data-reveal>
+        <div class="container">
+          <div transition:name={`project-cover-${project.slug}`}>
+            <AssetPlaceholder label={cover.label[locale]} file={cover.file} type={cover.type} accent={project.accent} aspect="wide" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    (project.layout === "editorial" || project.layout === "digital") && (
+      <section class="hero-media" data-reveal>
+        <div class="container">
+          <div class="hero-media-collage" data-layout={project.layout}>
+            <div class="collage-primary" transition:name={`project-cover-${project.slug}`}>
+              <AssetPlaceholder label={cover.label[locale]} file={cover.file} type={cover.type} accent={project.accent} aspect={project.layout === "digital" ? "square" : "wide"} />
+            </div>
+            {restAssets.map((asset) => (
+              <AssetPlaceholder label={asset.label[locale]} file={asset.file} type={asset.type} accent={project.accent} aspect={project.layout === "digital" ? "square" : "portrait"} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    copy.stats && (
+      <section class="stats" data-reveal>
+        <div class="container stats-grid">
+          {copy.stats.map((stat) => (
+            <div class="stat">
+              <p class="stat-value">{stat.value}</p>
+              <p class="stat-label">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="structure">
+    <div class="container structure-grid">
+      <div class="structure-block" data-reveal>
+        <p class="eyebrow">{copy.objectiveLabel}</p>
+        <p class="structure-body">{copy.objective}</p>
+      </div>
+      <div class="structure-block" data-reveal>
+        <p class="eyebrow">{copy.roleLabel}</p>
+        <ul class="structure-list">
+          {copy.role.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="structure-block" data-reveal>
+        <p class="eyebrow">{copy.executionLabel}</p>
+        <p class="structure-body">{copy.execution}</p>
+      </div>
+      <div class="structure-block structure-block--outcome" data-reveal>
+        <div class="outcome-frame">
+          <ThresholdFrame accent={project.accent} variant="aperture" />
+        </div>
+        <p class="eyebrow">{copy.outcomeLabel}</p>
+        <p class="pull-quote structure-outcome">{copy.outcome}</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container case-back">
+    <a href={`/${locale}/#work`} class="back-link">
+      {locale === "en" ? "← Back to work" : "→ الرجوع إلى الأعمال"}
+    </a>
+  </div>
+</article>
+
+<style>
+  .case-study[data-accent="sky"] {
+    --case-accent: var(--sky);
+    --case-accent-deep: var(--sky-deep);
+  }
+  .case-study[data-accent="pink"] {
+    --case-accent: var(--pink);
+    --case-accent-deep: var(--pink-deep);
+  }
+  .case-study[data-accent="green"] {
+    --case-accent: var(--green);
+    --case-accent-deep: var(--green-deep);
+  }
+  .case-study[data-accent="yellow"] {
+    --case-accent: var(--yellow);
+    --case-accent-deep: var(--yellow-deep);
+  }
+  .case-study[data-accent="coral"] {
+    --case-accent: var(--coral);
+    --case-accent-deep: var(--coral-deep);
+  }
+
+  .case-hero {
+    padding-block: var(--space-2xl) var(--space-lg);
+    background: color-mix(in srgb, var(--case-accent) 14%, var(--paper));
+  }
+
+  .case-title {
+    font-size: var(--text-4xl);
+    max-width: 20ch;
+    margin-top: var(--space-xs);
+  }
+
+  .hero-media {
+    padding-block: var(--space-xl);
+  }
+
+  .hero-media-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+  }
+
+  .hero-media-collage {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+  }
+
+  .hero-media-collage[data-layout="editorial"] {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .collage-primary {
+    grid-row: span 2;
+  }
+
+  .hero-media-collage[data-layout="digital"] .collage-primary {
+    grid-row: auto;
+  }
+
+  .journey {
+    padding-block: var(--space-2xl);
+  }
+
+  .journey-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+
+  .journey-stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .journey-index {
+    font-variant-numeric: tabular-nums;
+    color: var(--case-accent-deep);
+    font-size: var(--text-sm);
+  }
+
+  .journey-label {
+    font-family: var(--font-display-en);
+    font-weight: 500;
+    font-size: var(--text-lg);
+  }
+
+  .journey-stage-assets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  [dir="rtl"] .journey-label {
+    font-family: var(--font-display-ar);
+    font-weight: 600;
+  }
+
+  .stats {
+    padding-block: var(--space-xl);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: var(--font-display-en);
+    font-size: var(--text-2xl);
+    font-weight: 500;
+  }
+
+  [dir="rtl"] .stat-value {
+    font-family: var(--font-display-ar);
+  }
+
+  .stat-label {
+    color: color-mix(in srgb, var(--paper) 65%, transparent);
+    font-size: var(--text-xs);
+    margin-top: var(--space-3xs);
+  }
+
+  .structure {
+    padding-block: var(--space-2xl);
+  }
+
+  .structure-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xl) var(--space-lg);
+  }
+
+  .structure-body {
+    max-width: 48ch;
+    color: var(--ink-soft);
+  }
+
+  .structure-list {
+    margin: 0;
+    padding-inline-start: 1.1em;
+    color: var(--ink-soft);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    max-width: 48ch;
+  }
+
+  .structure-block--outcome {
+    position: relative;
+  }
+
+  .outcome-frame {
+    max-width: 60px;
+    margin-bottom: var(--space-sm);
+    color: var(--case-accent-deep);
+  }
+
+  .structure-outcome {
+    font-size: var(--text-xl);
+    max-width: 34ch;
+  }
+
+  .case-back {
+    padding-block: 0 var(--space-2xl);
+  }
+
+  .back-link {
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 760px) {
+    .hero-media-grid,
+    .hero-media-collage,
+    .journey-list,
+    .stats-grid,
+    .structure-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .collage-primary {
+      grid-row: auto;
+    }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import GrainOverlay from "../components/visuals/GrainOverlay.astro";
+import "../styles/global.css";
+
+type Props = {
+  locale: "en" | "ar";
+  title: string;
+  description: string;
+};
+
+const { locale, title, description } = Astro.props as Props;
+const dir = locale === "ar" ? "rtl" : "ltr";
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang={locale} dir={dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={locale === "en" ? "en_US" : "ar_SA"} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="alternate" hreflang="en" href={new URL(Astro.url.pathname.replace(/^\/ar/, "/en"), Astro.site)} />
+    <link rel="alternate" hreflang="ar" href={new URL(Astro.url.pathname.replace(/^\/en/, "/ar"), Astro.site)} />
+    <ViewTransitions />
+  </head>
+  <body>
+    <GrainOverlay />
+    <a class="skip-link" href="#main">{locale === "en" ? "Skip to content" : "تخطي إلى المحتوى"}</a>
+    <Nav locale={locale} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+    <script is:inline src="/scripts/interactions.js"></script>
+  </body>
+</html>

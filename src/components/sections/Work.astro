@@ -1,0 +1,123 @@
+---
+import { projects, additionalWork, workSection } from "../../data/projects";
+import AssetPlaceholder from "../AssetPlaceholder.astro";
+
+type Props = { locale: "en" | "ar" };
+const { locale } = Astro.props as Props;
+const w = workSection[locale];
+const extra = additionalWork[locale];
+---
+
+<section id="work" class="work">
+  <div class="container">
+    <div class="work-head" data-reveal>
+      <p class="eyebrow">{w.eyebrow}</p>
+      <h2 class="heading work-heading">{w.heading}</h2>
+    </div>
+
+    <div class="work-list">
+      {
+        projects.map((project) => {
+          const copy = project[locale];
+          const cover = project.assets[0];
+          return (
+            <a class="work-card" data-accent={project.accent} data-reveal href={`/${locale}/work/${project.slug}/`}>
+              <div class="work-card-media" transition:name={`project-cover-${project.slug}`}>
+                <AssetPlaceholder label={cover.label[locale]} file={cover.file} type={cover.type} accent={project.accent} aspect="wide" />
+              </div>
+              <div class="work-card-copy">
+                <p class="work-card-category">{copy.category}</p>
+                <h3 class="work-card-title">{copy.title}</h3>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+
+    <div class="additional-work" data-reveal>
+      <p class="eyebrow">{extra.heading}</p>
+      <ul class="additional-list">
+        {extra.items.map((item) => <li>{item.name}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .work {
+    padding-block: var(--space-2xl);
+  }
+
+  .work-head {
+    max-width: 44ch;
+    margin-bottom: var(--space-xl);
+  }
+
+  .work-heading {
+    font-size: var(--text-3xl);
+    margin-top: var(--space-xs);
+  }
+
+  .work-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .work-card {
+    text-decoration: none;
+    color: var(--ink);
+    display: block;
+  }
+
+  .work-card-media {
+    margin-bottom: var(--space-sm);
+    transition: transform var(--duration-md) var(--ease-out);
+  }
+
+  .work-card:hover .work-card-media {
+    transform: translateY(-4px);
+  }
+
+  .work-card-category {
+    font-size: var(--text-xs);
+    color: var(--ink-faint);
+    margin-bottom: var(--space-3xs);
+  }
+
+  .work-card-title {
+    font-family: var(--font-display-en);
+    font-weight: 500;
+    font-size: var(--text-xl);
+  }
+
+  [dir="rtl"] .work-card-title {
+    font-family: var(--font-display-ar);
+    font-weight: 600;
+  }
+
+  .additional-work {
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-lg);
+  }
+
+  .additional-list {
+    list-style: none;
+    margin: var(--space-sm) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    font-size: var(--text-lg);
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 760px) {
+    .work-list {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

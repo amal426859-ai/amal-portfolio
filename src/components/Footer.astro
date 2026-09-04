@@ -1,0 +1,29 @@
+---
+import { site } from "../data/site";
+
+type Props = { locale: "en" | "ar" };
+const { locale } = Astro.props as Props;
+const s = site[locale];
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span dir="ltr">{s.website}</span>
+    <span><span dir="ltr">© {new Date().getFullYear()}</span> {s.name}</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--ink);
+    color: color-mix(in srgb, var(--paper) 55%, transparent);
+    font-size: var(--text-xs);
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    padding-block: var(--space-sm);
+    border-top: 1px solid color-mix(in srgb, var(--paper) 14%, transparent);
+  }
+</style>

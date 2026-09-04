@@ -1,0 +1,168 @@
+@import "./fonts.css";
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  color-scheme: light;
+}
+
+html:lang(ar) {
+  font-family: var(--font-body-ar);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body-en);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-body-ar);
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p,
+figure {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.heading {
+  font-family: var(--font-display-en);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+[dir="rtl"] .heading {
+  font-family: var(--font-display-ar);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.body-copy {
+  max-width: var(--measure-body);
+  color: var(--ink-soft);
+}
+
+.body-copy p + p {
+  margin-top: var(--space-sm);
+}
+
+.pull-quote {
+  font-family: var(--font-display-en);
+  font-weight: 400;
+  font-style: italic;
+  line-height: var(--leading-body-serif);
+  max-width: var(--measure-body-serif);
+  text-wrap: balance;
+}
+
+[dir="rtl"] .pull-quote {
+  font-family: var(--font-display-ar);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: var(--space-sm);
+  top: -60px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  z-index: 100;
+  transition: top var(--duration-sm) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  top: var(--space-2xs);
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--sky-deep);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--sky);
+  color: var(--ink);
+}
+
+/* Scroll reveal — classes are only ever added by JS, so content stays
+   visible by default when JavaScript is unavailable. */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--duration-lg) var(--ease-out), transform var(--duration-lg) var(--ease-out);
+}
+
+[data-parallax] {
+  will-change: transform;
+}

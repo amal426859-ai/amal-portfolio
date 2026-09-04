@@ -1,0 +1,104 @@
+---
+import { hero } from "../../data/hero";
+import AtmosphereField from "../visuals/AtmosphereField.astro";
+import ThresholdFrame from "../visuals/ThresholdFrame.astro";
+
+type Props = { locale: "en" | "ar" };
+const { locale } = Astro.props as Props;
+const h = hero[locale];
+---
+
+<section id="home" class="hero">
+  <div class="hero-parallax" data-parallax="0.06">
+    <AtmosphereField accent="sky" variant="drift" />
+  </div>
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow" data-reveal>{h.kicker}</p>
+      <h1 class="heading hero-headline" data-reveal>{h.headline}</h1>
+      <p class="hero-sub body-copy" data-reveal>{h.sub}</p>
+      <div class="hero-meta" data-reveal>
+        <span>{h.location}</span>
+        <a class="hero-cta" href="#work">{h.cta}</a>
+      </div>
+    </div>
+    <div class="hero-visual" data-reveal>
+      <ThresholdFrame accent="sky" variant="window" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 86vh;
+    display: flex;
+    align-items: center;
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .hero-headline {
+    font-size: var(--text-4xl);
+    margin-block: var(--space-xs) var(--space-md);
+    max-width: 14ch;
+  }
+
+  .hero-sub {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    font-size: var(--text-sm);
+    color: var(--ink-soft);
+  }
+
+  .hero-cta {
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+  }
+
+  .hero-visual {
+    max-width: 240px;
+    margin-inline: auto;
+  }
+
+  .hero-parallax {
+    position: absolute;
+    inset: -10% 0 -10% 0;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+
+    .hero-visual {
+      display: none;
+    }
+
+    .hero {
+      min-height: auto;
+    }
+
+    .hero-headline {
+      max-width: none;
+    }
+  }
+</style>
