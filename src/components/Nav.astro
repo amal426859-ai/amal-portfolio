@@ -1,14 +1,15 @@
 ---
 import { site } from "../data/site";
 import { altLocalePath, otherLocale } from "../utils/i18n";
+import { withBase, stripBase } from "../utils/paths";
 
 type Props = { locale: "en" | "ar" };
 const { locale } = Astro.props as Props;
 const s = site[locale];
-const pathname = Astro.url.pathname;
-const isHome = pathname === `/${locale}/` || pathname === `/${locale}`;
-const homeHref = `/${locale}/`;
-const altHref = altLocalePath(pathname, otherLocale(locale));
+const appPath = stripBase(Astro.url.pathname);
+const isHome = appPath === `/${locale}/` || appPath === `/${locale}`;
+const homeHref = withBase(`/${locale}/`);
+const altHref = withBase(altLocalePath(appPath, otherLocale(locale)));
 ---
 
 <header class="nav" data-nav>

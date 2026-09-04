@@ -1,5 +1,6 @@
 ---
 import { brands, brandLogos } from "../../data/brands";
+import { withBase } from "../../utils/paths";
 
 type Props = { locale: "en" | "ar" };
 const { locale } = Astro.props as Props;
@@ -15,7 +16,7 @@ const b = brands[locale];
       {
         brandLogos.map((logo) => (
           <li class="brand-slot" title={`/assets/brands/${logo.file}`}>
-            <img src={`/assets/brands/${logo.file}`} alt={logo.name} loading="lazy" onerror="this.parentElement.dataset.missing='true'" />
+            <img src={withBase(`/assets/brands/${logo.file}`)} alt={logo.name} loading="lazy" onerror="this.parentElement.dataset.missing='true'" />
             <span class="brand-fallback">{logo.name}</span>
           </li>
         ))

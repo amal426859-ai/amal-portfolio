@@ -1,6 +1,7 @@
 ---
 import { site } from "../../data/site";
 import AtmosphereField from "../visuals/AtmosphereField.astro";
+import { withBase } from "../../utils/paths";
 
 type Props = { locale: "en" | "ar" };
 const { locale } = Astro.props as Props;
@@ -30,10 +31,10 @@ const copy = {
     <p class="contact-location">{s.location}</p>
 
     <div class="contact-cv">
-      <a class="cv-button" href="/assets/cv/amal-alsofayan-cv.pdf" download>
+      <a class="cv-button" href={withBase("/assets/cv/amal-alsofayan-cv.pdf")} download>
         {s.cv.download}
       </a>
-      <a class="cv-button cv-button--ghost" href="/assets/cv/amal-alsofayan-cv.pdf" target="_blank" rel="noopener noreferrer">
+      <a class="cv-button cv-button--ghost" href={withBase("/assets/cv/amal-alsofayan-cv.pdf")} target="_blank" rel="noopener noreferrer">
         {s.cv.view}
       </a>
     </div>

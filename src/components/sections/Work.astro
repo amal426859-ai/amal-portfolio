@@ -1,6 +1,7 @@
 ---
 import { projects, additionalWork, workSection } from "../../data/projects";
 import AssetPlaceholder from "../AssetPlaceholder.astro";
+import { withBase } from "../../utils/paths";
 
 type Props = { locale: "en" | "ar" };
 const { locale } = Astro.props as Props;
@@ -21,7 +22,7 @@ const extra = additionalWork[locale];
           const copy = project[locale];
           const cover = project.assets[0];
           return (
-            <a class="work-card" data-accent={project.accent} data-reveal href={`/${locale}/work/${project.slug}/`}>
+            <a class="work-card" data-accent={project.accent} data-reveal href={withBase(`/${locale}/work/${project.slug}/`)}>
               <div class="work-card-media" transition:name={`project-cover-${project.slug}`}>
                 <AssetPlaceholder label={cover.label[locale]} file={cover.file} type={cover.type} accent={project.accent} aspect="wide" />
               </div>

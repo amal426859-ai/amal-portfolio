@@ -9,6 +9,7 @@
 import type { Project } from "../data/projects";
 import AssetPlaceholder from "./AssetPlaceholder.astro";
 import ThresholdFrame from "./visuals/ThresholdFrame.astro";
+import { withBase } from "../utils/paths";
 
 type Props = { project: Project; locale: "en" | "ar" };
 const { project, locale } = Astro.props as Props;
@@ -139,7 +140,7 @@ const [cover, ...restAssets] = project.assets;
   </section>
 
   <div class="container case-back">
-    <a href={`/${locale}/#work`} class="back-link">
+    <a href={withBase(`/${locale}/#work`)} class="back-link">
       {locale === "en" ? "← Back to work" : "→ الرجوع إلى الأعمال"}
     </a>
   </div>

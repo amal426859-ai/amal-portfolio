@@ -1,3 +1,4 @@
 ---
-return Astro.redirect("/en/", 302);
+import { withBase } from "../utils/paths";
+return Astro.redirect(withBase("/en/"), 302);
 ---
